@@ -82,6 +82,9 @@ body {
     color: #6b6b6b;
     background-color: #ffffff;
   }
+  .navbar-header .navbar-brand {
+	width: 100%;
+  }
 }
 
 /* Custom page CSS
