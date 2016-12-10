@@ -42,7 +42,7 @@ body {
   color: #6b6b6b;
 }
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
-  color: #6b6b6b;
+  color: #000000;
 }
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
   color: #6b6b6b;
@@ -99,7 +99,7 @@ body {
   color: #3366BB;
 }
 .container a:hover {
-  color: #267723;
+  color: #000000;
 }
 .img-responsive {
  display: block;
