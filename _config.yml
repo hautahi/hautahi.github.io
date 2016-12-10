@@ -3,7 +3,7 @@ highlighter: rouge
 #markdown: rdiscount
 #rdiscount:
 #  extensions: [smart]
-permalink: /:title.html
+permalink: /:title
 paginate: 5
 gems: [jekyll-paginate]
 port: 3000
@@ -12,7 +12,7 @@ safe: true
 
 # edit here to achieve your personal greatness
 url: http://hautahi.github.io/
-baseurl: 
+baseurl: / 
 title: Hautahi Kingi
 author: Hautahi Kingi
 description: Personal blog and resume
