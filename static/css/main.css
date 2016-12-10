@@ -185,3 +185,10 @@ div.footer{
   padding-bottom: 15px;
   
 }*/
+
+/* ------------------Own added CSS--------------- */
+
+/* Make navbar reflect page */
+.navbar-right > li > a.active {
+		color: #000000;
+}
