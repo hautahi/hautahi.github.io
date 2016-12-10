@@ -33,7 +33,7 @@ body {
   color: #6b6b6b;
 }
 .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
-  color: #6b6b6b;
+  color: #000000;
 }
 .navbar-default .navbar-text {
   color: #6b6b6b;
@@ -99,7 +99,7 @@ body {
   color: #3366BB;
 }
 .container a:hover {
-  color: #000000;
+  color: #3366BB;
 }
 .img-responsive {
  display: block;
