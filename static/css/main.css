@@ -192,3 +192,6 @@ div.footer{
 .navbar-right > li > a.active {
 		color: #000000;
 }
+
+.bottompad {padding-bottom: 25px;}
+
