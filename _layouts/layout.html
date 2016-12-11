@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	  <meta name="author" content="{{ site.author }}" />
+	<meta name="author" content="{{ site.author }}" />
     <meta name="description" content="{{ site.description }}">
-    <link rel="favicon" href="{{ site.baseurl }}static/img/favicon.ico">
+    <link rel="favicon" type="image/x-icon" href="/static/img/favicon.ico">
 
     {% if page.title %}
       <title>{{ page.title }}</title>
@@ -69,7 +69,6 @@ $(document).ready(function(){
   $("#jmp").on("show.bs.collapse", function(){$(".jmp_ab").html('[Hide Abstract]');});
 });
 
-
 $(document).ready(function(){
   $("#demo").on("hide.bs.collapse", function(){$(".wheels").html('[Show Abstract]');});
   $("#demo").on("show.bs.collapse", function(){$(".wheels").html('[Hide Abstract]');});
@@ -81,12 +80,8 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
-  $("#MID").on("hide.bs.collapse", function(){
-    $(".MID_ab").html('[Show Abstract]');
-  });
-  $("#MID").on("show.bs.collapse", function(){
-    $(".MID_ab").html('[Hide Abstract]');
-  });
+  $("#MID").on("hide.bs.collapse", function(){$(".MID_ab").html('[Show Abstract]');});
+  $("#MID").on("show.bs.collapse", function(){$(".MID_ab").html('[Hide Abstract]');});
 });
 
 $(document).ready(function(){
