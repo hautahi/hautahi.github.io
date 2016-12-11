@@ -60,5 +60,53 @@
     <script src="{{ site.baseurl }}static/js/main.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="{{ site.baseurl }}static/js/ie10-viewport-bug-workaround.js"></script>
+
+	<!-- Add "hide abstract" functionality -->
+
+<script>
+$(document).ready(function(){
+  $("#jmp").on("hide.bs.collapse", function(){$(".jmp_ab").html('[Show Abstract]');});
+  $("#jmp").on("show.bs.collapse", function(){$(".jmp_ab").html('[Hide Abstract]');});
+});
+
+
+$(document).ready(function(){
+  $("#demo").on("hide.bs.collapse", function(){$(".wheels").html('[Show Abstract]');});
+  $("#demo").on("show.bs.collapse", function(){$(".wheels").html('[Hide Abstract]');});
+});
+
+$(document).ready(function(){
+  $("#WP2").on("hide.bs.collapse", function(){$(".wheels1").html('[Show Abstract]');});
+  $("#WP2").on("show.bs.collapse", function(){$(".wheels1").html('[Hide Abstract]');});
+});
+
+$(document).ready(function(){
+  $("#MID").on("hide.bs.collapse", function(){
+    $(".MID_ab").html('[Show Abstract]');
+  });
+  $("#MID").on("show.bs.collapse", function(){
+    $(".MID_ab").html('[Hide Abstract]');
+  });
+});
+
+$(document).ready(function(){
+  $("#rep").on("hide.bs.collapse", function(){
+    $(".rep_ab").html('[Show Abstract]');
+  });
+  $("#rep").on("show.bs.collapse", function(){
+    $(".rep_ab").html('[Hide Abstract]');
+  });
+});
+
+$(document).ready(function(){
+  $("#WP3").on("hide.bs.collapse", function(){
+    $(".WP3_ab").html('[Show Abstract]');
+  });
+  $("#WP3").on("show.bs.collapse", function(){
+    $(".WP3_ab").html('[Hide Abstract]');
+  });
+});
+
+</script>
   </body>
 </html>
