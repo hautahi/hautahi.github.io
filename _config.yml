@@ -1,6 +1,6 @@
 # top level stuff you probably don't need to touch
 highlighter: rouge
-#markdown: rdiscount
+markdown: kramdown
 #rdiscount:
 #  extensions: [smart]
 permalink: /:title
@@ -11,7 +11,7 @@ safe: true
 
 
 # edit here to achieve your personal greatness
-url: http://hautahi.github.io/
+url: http://hautahi.com/
 baseurl: / 
 title: Hautahi Kingi
 author: Hautahi Kingi
