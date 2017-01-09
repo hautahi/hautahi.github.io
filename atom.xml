@@ -1,5 +1,6 @@
 ---
 layout: atom
+sitemap: false
 ---
 
 {% for post in site.posts limit:10 %}
