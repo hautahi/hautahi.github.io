@@ -162,9 +162,9 @@ body {
 }
 
 .blogpost{
-  text-align: left;
-  line-height: 30px;
-  font-size: 18px;
+  text-align: justify;
+  line-height: 20px;
+  font-size: 14px;
 }
 
 /* Footer 
@@ -203,6 +203,8 @@ div.footer{
   }
 
 .bottompad {padding-bottom: 25px;}
+
+.label-success {background-color: #3366BB;}
 
 table tr:nth-child(2n) {
 background-color: #f8f8f8;
