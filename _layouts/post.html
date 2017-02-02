@@ -12,15 +12,15 @@ layout: layout
 		<h4>
 		{{ page.date | date: "%B %e, %Y" }}
 			&nbsp;&nbsp;
-			{% for tag in page.tags %}
-			 <span class="label label-success">{{ tag }}</span>
-			{% endfor %}
 		</h4>
 	</div>
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<div class="blogpost">
 			  {{ content }}
+			{% for tag in page.tags %}
+			 <span class="label label-success">{{ tag }}</span>
+			{% endfor %}
 			   <hr>
 			   <div class="related-posts">
 				   <h5>Related Posts</h5>
