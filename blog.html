@@ -1,12 +1,12 @@
 ---
-layout: layout
+layout: page
 title: Blog | Hautahi Kingi
 ---
 
 <div class="container">
 <h3>Posts</h3>
   <div class="panel panel-default">
-    <div class="panel-body">
+    <div class="panel-body hidden-xs">
 		{% for post in site.posts %}
 			<div class="row">
 				 <div class="col-sm-4 col-md-4 col-lg-4">
@@ -17,6 +17,18 @@ title: Blog | Hautahi Kingi
 				 <div class="col-sm-8 col-md-8 col-lg-8">
 					 <h5 style="text-align: left">
 					 	<strong><a href="{{ post.url }}">{{ post.title }}</a></strong>
+					 </h5>
+				 </div>
+			</div>
+	    {% endfor %}
+	</div>
+    <div class="panel-body visible-xs">
+		{% for post in site.posts %}
+			<div class="row">
+				 <div class="col-xs-12">
+					 <h5 style="text-align: center">
+					 	{{ post.date | date: "%B %e, %Y" }}<br>
+						<strong><a href="{{ post.url }}">{{ post.title }}</a></strong>
 					 </h5>
 				 </div>
 			</div>
