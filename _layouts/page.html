@@ -57,6 +57,10 @@
 	<!-- Add "hide abstract" functionality -->
 <script>
 $(document).ready(function(){
+  $("#P1").on("hide.bs.collapse", function(){$(".P1_ab").html('[Show Abstract]');});
+  $("#P1").on("show.bs.collapse", function(){$(".P1_ab").html('[Hide Abstract]');});
+});
+$(document).ready(function(){
   $("#jmp").on("hide.bs.collapse", function(){$(".jmp_ab").html('[Show Abstract]');});
   $("#jmp").on("show.bs.collapse", function(){$(".jmp_ab").html('[Hide Abstract]');});
 });
