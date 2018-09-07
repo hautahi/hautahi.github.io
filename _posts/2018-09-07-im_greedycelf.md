@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Influence Maximization in Python - Greedy vs CELF
+mathjax: true
 tags: 
 - Python
 - igraph
