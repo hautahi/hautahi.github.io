@@ -213,3 +213,15 @@ background-color: #f8f8f8;
 h4 a.footnoteRef {
   	color: #3366BB;
 }
+
+/* This only works with kramdown. Just add {:.center-image} after the markdown image insertion.*/
+.center-image {
+  margin: 0 auto;
+  display: block;
+}
+
+/* This seems to work with all markdowns. Just add ?style=centerme directly after the image reference (in the brackets).*/
+img[src$="centerme"] {
+  display:block;
+  margin: 0 auto;
+}
