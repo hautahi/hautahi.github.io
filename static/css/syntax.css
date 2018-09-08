@@ -63,3 +63,30 @@
 .highlight .lineno {-webkit-user-select: none;-moz-user-select: none; -o-user-select: none;}
 .lineno::-moz-selection {background-color: transparent;} /* Mozilla specific */
 .lineno::selection {background-color: transparent;} /* Other major browsers */
+
+/* ------------------Own added CSS--------------- */
+
+/* blue bold packages*/
+.highlight .nn {
+   font-weight: bold; 
+   color: #0000FF;
+}
+
+/* blue function names*/
+.highlight .nf {
+   font-weight: normal; 
+   color: #0000FF;
+}
+
+/* green native function names*/
+.highlight .nb {
+   color: #008000;
+}
+
+/* green bold function declarations and import statements*/
+.k, .kn {
+    font-weight: bold; 
+    color: #008000;
+}
+
+

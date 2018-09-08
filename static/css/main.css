@@ -226,6 +226,13 @@ img[src$="centerme"] {
   margin: 0 auto;
 }
 
+/* Shade background of code chunks*/
 .language-python .highlight{
+    background-color:#f5f5f5;
+}
+
+/* Change background and text color of inline code*/
+code {
+    color: #333;
     background-color:#f5f5f5;
 }
