@@ -224,7 +224,7 @@ plot(g,bbox = (200,200),margin = 20,layout = g.layout("kk"))
 
 
 
-![svg](/blog_images/im_greedycelf/output_12_0.svg){:.center-image}
+![svg](/blog_images/im_greedycelf/output_12_0.svg?style=centerme)
 
 
 
@@ -304,7 +304,7 @@ plt.show()
 ```
 
 
-![png](/blog_images/im_greedycelf/output_20_0.png){:.center-image}
+![png](/blog_images/im_greedycelf/output_20_0.png?style=centerme)
 
 
 We can get some further insight into the superior computational efficiency of CELF by observing how many "node lookups" it had to perform during each of the 10 rounds. The list stored in `celf_output[3]` shows that the first round iterated over all 100 nodes of the network. This is identical to Greedy which is why the graph above shows that the running time is equivalent for $k=1$. However, for subsequent iterations, there are far fewer spread computations because the marginal spread of a node in a previous iteration is a good indicator for its marginal spread in a future iteration. Note the relationship between the values below and the corresponding computation time presented in the graph above. There is a visible jump in the blue line for higher values of the "node lookups".
@@ -335,7 +335,7 @@ plt.show()
 ```
 
 
-![png](/blog_images/im_greedycelf/output_24_0.png){:.center-image}
+![png](/blog_images/im_greedycelf/output_24_0.png?style=centerme)
 
 
 ## Conclusion
