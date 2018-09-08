@@ -1,6 +1,10 @@
 # top level stuff you probably don't need to touch
-highlighter: rouge
+#highlighter: rouge
 markdown: redcarpet
+redcarpet: 
+  input: GFM
+  syntax_highlighter: rouge
+#markdown: kramdown
 #rdiscount:
 #  extensions: [smart]
 permalink: /:title
