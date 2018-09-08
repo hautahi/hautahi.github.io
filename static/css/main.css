@@ -225,3 +225,7 @@ img[src$="centerme"] {
   display:block;
   margin: 0 auto;
 }
+
+.language-python .highlight{
+    background-color:#f5f5f5;
+}
