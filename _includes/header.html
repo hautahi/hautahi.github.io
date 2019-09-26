@@ -6,41 +6,75 @@
 
     <div id="navbar" class="hidden-xs">
       <ul class="nav navbar-nav navbar-right">
-		<li><a {% if page.url == '/' %} class="active"{% endif %}  href="{{ site.github.url }}">Home</a></li>
-        <li><a {% if page.url == '/work' %} class="active"{% endif %} href="{{ site.baseurl }}work">Work</a></li>
-        <li><a {% if page.url == '/welcome_signs' %} class="active"{% endif %}  href="{{ site.baseurl }}welcome_signs">Play</a></li>
+        
+        <li>
+        {% if page.url == '/' %}
+        <a class="active", href="{{ site.github.url }}work"><u>Home</u></a>
+        {% else %}
+        <a href="{{ site.github.url }}work">Home</a>
+        {% endif %} 
+
+        <li>
+        {% if page.url == '/work' %}
+        <a class="active", href="{{ site.baseurl }}work"><u>Work</u></a>
+        {% else %}
+        <a href="{{ site.baseurl }}work">Work</a>
+        {% endif %} 
+        </li>
+
+        <li>
+        {% if page.url == '/welcome_signs' %}
+        <a class="active", href="{{ site.baseurl }}welcome_signs"><u>Play</u></a>
+        {% else %}
+        <a href="{{ site.baseurl }}welcome_signs">Play</a>
+        {% endif %} 
+
         <li><a target="blank" href="{{ site.baseurl }}static/docs/CV_H.Kingi.pdf">CV</a></li>
-        <li><a {% if page.url == '/blog' %} class="active"{% endif %}  href="{{ site.baseurl }}blog">Blog</a></li>
+        
+        <li>
+        {% if page.url == '/blogs' %}
+        <a class="active", href="{{ site.baseurl }}blog"><u>Blog</u></a>
+        {% else %}
+        <a href="{{ site.baseurl }}blog">Blog</a>
+        {% endif %} 
+        
       </ul>
     </div>
 
     <div id="navbar" class="visible-xs">
       <ul class="nav navbar-nav navbar-right">
-		<li class="col-xs-offset-1 col-xs-2"><a {% if page.url == '/' %} class="active"{% endif %}  href="{{ site.github.url }}">Home</a></li>
-        <li class="col-xs-2"><a {% if page.url == '/work' %} class="active"{% endif %} href="{{ site.baseurl }}work">Work</a></li>
-        <li class="col-xs-2"><a {% if page.url == '/welcome_signs' %} class="active"{% endif %}  href="{{ site.baseurl }}welcome_signs">Play</a></li>
+        <li class="col-xs-offset-1 col-xs-2">
+        {% if page.url == '/' %}
+        <a class="active", href="{{ site.github.url }}work"><u>Home</u></a>
+        {% else %}
+        <a href="{{ site.github.url }}work">Home</a>
+        {% endif %} 
+
+        <li class="col-xs-2">
+        {% if page.url == '/work' %}
+        <a class="active", href="{{ site.baseurl }}work"><u>Work</u></a>
+        {% else %}
+        <a href="{{ site.baseurl }}work">Work</a>
+        {% endif %} 
+        </li>
+
+        <li class="col-xs-2">
+        {% if page.url == '/welcome_signs' %}
+        <a class="active", href="{{ site.baseurl }}welcome_signs"><u>Play</u></a>
+        {% else %}
+        <a href="{{ site.baseurl }}welcome_signs">Play</a>
+        {% endif %} 
+
         <li class="col-xs-2"><a target="blank" href="{{ site.baseurl }}static/docs/CV_H.Kingi.pdf">CV</a></li>
-        <li class="col-xs-2"><a {% if page.url == '/blog' %} class="active"{% endif %}  href="{{ site.baseurl }}blog">Blog</a></li>
+        
+        <li class="col-xs-2">
+        {% if page.url == '/blogs' %}
+        <a class="active", href="{{ site.baseurl }}blog"><u>Blog</u></a>
+        {% else %}
+        <a href="{{ site.baseurl }}blog">Blog</a>
+        {% endif %}
+
       </ul>
 
-
-<!--
-	<div id="navbar" class="visible-xs">
-
- 	<button type="button" data-toggle="collapse" data-target="#my-collapsible-menu"> MENU </button>
-
-		<div class="collapse" id="my-collapsible-menu">
-		  <ul class="nav navbar-nav">
-			<li><a {% if page.url == '/' %} class="active"{% endif %}  href="{{ site.baseurl }}">Home</a></li>
-			<li><a {% if page.url == '/work' %} class="active"{% endif %} href="{{ site.baseurl }}work">Work</a></li>
-			<li><a {% if page.url == '/play' %} class="active"{% endif %}  href="{{ site.baseurl }}play">Play</a></li>
-			<li><a target="blank" href="{{ site.baseurl }}static/docs/CV_H.Kingi.pdf">CV</a></li>
-        	<li><a {% if page.url == '/blog' %} class="active"{% endif %}  href="{{ site.baseurl }}blog">Blog</a></li>
-		  </ul>
-	    </div>
-  	</div>
--->
   </div>
 </nav>
-
-
