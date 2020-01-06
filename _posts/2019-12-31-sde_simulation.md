@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Numerical SDE Simulation - Euler vs. Milstein Methods
+title: Numerical SDE Simulation - Euler vs Milstein Methods
 mathjax: true
 tags: 
 - Python
