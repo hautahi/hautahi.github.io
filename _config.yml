@@ -5,7 +5,10 @@ markdown: kramdown
 #  extensions: [smart]
 permalink: /:title
 paginate: 5
-gems: [jekyll-paginate]
+#gems: [jekyll-paginate]
+gems:
+ - jekyll-paginate
+ - jekyll-redirect-from
 port: 3000
 safe: true
 plugins:
