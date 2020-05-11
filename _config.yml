@@ -8,8 +8,10 @@ paginate: 5
 gems: [jekyll-paginate]
 port: 3000
 safe: true
-
-
+plugins:
+  - jekyll-redirect-from
+whitelist:
+  - jekyll-redirect-from
 # edit here to achieve your personal greatness
 url: https://hautahi.com/
 description: Kia ora, I'm an economist based in Washington DC.
