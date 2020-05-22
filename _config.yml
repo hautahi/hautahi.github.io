@@ -17,7 +17,7 @@ whitelist:
   - jekyll-redirect-from
 # edit here to achieve your personal greatness
 url: https://hautahi.com/
-description: Kia ora, I'm an economist based in Washington DC.
+description: Kia ora, I'm an economist and research scientist.
 baseurl: / 
 title: Hautahi Kingi
 author: Hautahi Kingi
