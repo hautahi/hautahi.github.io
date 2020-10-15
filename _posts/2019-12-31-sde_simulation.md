@@ -18,21 +18,27 @@ $$
 
 where $a(\cdot)$ and $b(\cdot)$ are functions that are often referred to as the "drift" and "diffusion" coefficients, respectively, and $B(t)$ is a Brownian motion. Note the "differential form", which is distinct from the "derivative" form we're used to seeing in ODEs because most stochastic processes are continuous but not differentiable. The above is therefore also commonly written in "integral form" as follows
 
+<div>
 $$
 Y(t) = Y(0) + \int^t_0 a(s,Y(s))ds + \int^t_0 b(s,Y(s)) dB(s)
 $$
+</div>
 
 where $Y(0)$ is given and the last integral is an "Ito integral". The above also implicitly defines the solution $Y(t)$, and if we're lucky, $a(\cdot)$ and $b(\cdot)$ are such that we can solve for $Y(t)$ analytically by computing the integrals. For example, in the special case of Geometric Brownian Motion where $a(\cdot)=\mu \cdot y$ and $b(\cdot)=\sigma \cdot y$, the SDE is 
 
+<div>
 $$
 dY(t) = \mu Y(t) dt + \sigma Y(t)dB(t)
 $$
-
+</div>
+    
 which is commonly used to model stock prices. The corresponding solution can be expressed explicitly as follows:
 
+<div>
 $$
 Y(t)=Y(0)\exp\left(\left(\mu - \sigma^2/2\right)t + \sigma B(t)\right)
 $$
+</div>
 
 A solution to an SDE is itself a stochastic function, which means that its value $Y(t)$ at any given time $t$ is a random variable. We'll begin by simulating four sample paths for $Y(t)$ to illustrate this point. Sample paths differ because of different realizations of the Brownian motion term. We first discretize a given time interval $[0,T]$ into $N$ chunks $0 = t_0 < t_1 < \cdots < t_N = T$ and compute the value of $Y$ at each point $t_i$. For convenience, we'll assume that the gap between each time point is the same (i.e. $t_n-t_{n-1}=\Delta t$ $\forall n$) although this isn't necessary. To compute the value of $B$ at those same points, we first construct a sample path of increments $\Delta B(t_n) = B(t_n)-B(t_{n-1})$ by recognizing that an increment is distributed according to $\sqrt{\Delta t}\cdot N(0,1)$ (this is an important property of Brownian motion). We can then create the sample path of Brownian motion `B` by summing the increments, and compute the exact solution `Y` using the analytical solution above.
 
@@ -148,16 +154,20 @@ Unfortunately, most SDEs don't have tidy explicit solutions, so we can't just di
 
 We can rewrite the integral form of Geometric Brownian Motion as follows:
 
+<div>
 $$
 Y(t_{n+1}) - Y(t_{n}) = \mu\int^{t_{n+1}}_{t_n}  Y(s) ds + \sigma\int^{t_{n+1}}_{t_n}  Y(s) dB(s)
 $$
-
+</div>
+    
 The simplest approximation to this is the Euler-Murayama method, which is the stochastic generalization of the standard Euler method for ODEs.
 
+<div>
 $$
 X_{n+1} - X_{n} = \mu X_n\Delta t_n + \sigma X_n \Delta B_n
 $$
-
+</div>
+    
 It follows intuitively from the above if we think of the first integral being approximated by $\mu X_n\Delta t$ and the second by $\sigma X_n \Delta B_n$, although its formal derivation is based on a Taylor expansion (more on this below). We start below by simulating a single sample path for the exact solution $Y(t)$, and the corresponding sample path for E-M approximations using two different values of $\Delta t$ (note that we choose the "big $\Delta t$" values to be exact multiples `R` of the smaller $\Delta t$ values so we can evaluate the processes at the same points).
 
 
@@ -200,16 +210,20 @@ The above plot suggests that the E-M approximation does a pretty good job, and t
 
 The Milstein method increases the accuracy of the E-M approximation by adding a second-order "correction" term, which is derived from the stochastic Taylor series expansion of $Y(t)$ by applying Ito's lemma to the $a()$ and $b()$ functions  (detailed [here](https://www.math.nyu.edu/~cai/Courses/Derivatives/compfin_lecture_5.pdf)). It can be shown that $dB^2 = dt$ and therefore if we are interested in retaining the approximation terms up to the first order of $\Delta t$, then we need to keep terms up to the second order of the Brownian increment. The E-M approximation fails to do this by truncating the stochastic Taylor series expansion "one term short". The Milstein method yields the following differential form
 
+<div>
 $$
 X_{n+1} - X_n = a(X_n)\Delta t + b(X_n)\Delta B_n \color{red}{+ 0.5b'(X_n)b(X_n)\left((\Delta B_n)^2-\Delta t\right)}
 $$
-
+</div>
+    
 which implies the following for our Geometric Brownian Motion example
 
+<div>
 $$
 X_{n+1} - X_n = a(X_n)\Delta t + b(X_n)\Delta B_n \color{red}{+ 0.5\sigma^2 X_n\left((\Delta B_n)^2-\Delta t\right)}
 $$
-
+</div>
+    
 Below, we simulate a single path using the same draw from the Brownian motion above, and plot it with the exact solution and the E-M approximation. We can see that the Milstein approximation line in green looks to be closer than the corresponding E-M approximation. As mentioned above, there are many ways to formally define what we mean when we say that one stochastic process is close to another. We move on to this next.
 
 
@@ -236,22 +250,28 @@ plt.xlabel('t'); plt.legend(loc=2);
 
 The concept of convergence formalizes what it means for one stochastic process to get closer to another as the discrete time steps $\Delta t$ are reduced. There are many different convergence definitions, but the two most common are "weak convergence" and "strong convergence". For *weak* convergence, we define the following error term
 
+<div>
 $$
 e^w(\Delta t) = \sup_{t_n}|E(X(t_n)) - E(Y(t_n))|
 $$
+</div>
 
 and for *strong* convergence we define
 
+<div>
 $$
 e^s(\Delta t) = \sup_{t_n} E(|X(t_n) - Y(t_n)|)
 $$
+</div>
 
 These terms are also often alternatively defined for a particular point rather than the the supremum over the interval $[0,T]$.
 This is most commonly the end-point $T$ so the strong error term, for example, becomes simply $E(|X(T) - Y(T)|)$. In any case, we say that $X(t)$ exhibits strong or weak convergence to $Y(t)$ if the relevant error tends to zero with $\Delta t$
 
+<div>
 $$
 \lim_{\Delta t\rightarrow 0}e^i(\Delta t) = 0
 $$
+</div>
 
 Notice the difference between the two types of convergence. The weak error term simply computes the error between the expected values of the two stochastic processes at a given point. So weak convergence captures the average behavior of the simulated approximations. The strong error term, on the other hand, is the mean of errors, which captures the difference between the approximation and the exact solution for each individual sample path before the average is taken. Strong convergence is therefore more demanding.
 
@@ -341,37 +361,47 @@ In addition to knowing that errors shrink with respect to $\Delta t$, we are als
 
 We say that an approximation has a rate of convergence equal to $\gamma$ if 
 
+<div>
 $$
 e(\Delta t) \leq C (\Delta t) ^ \gamma
 $$
-
+</div>
+    
 The order of convergence measures the rate at which the error decays. If an approximation is convergent with order $\gamma$, and we make the step $k$ times smaller, then the approximation error will decrease by a factor of $k^\gamma$. So an order equal to 1 means that if we want to decrease the error by 100 times, we have to make the step 100 times smaller. For an order equal to 0.5, we would need to make the step 10,000 times smaller.
 
 Above, we mentioned that strong convergence has implications for pathwise convergence (despite being a definition based on expected values). We can formalize this now using Markov's inequality, which says that the probability that a random variable $Z$ is greater than a constant $a>0$ is bounded above by $E(Z)/a$. That is,
 
+<div>
 $$
 P(Z\geq a) \leq E(Z)/a
 $$
+</div>
 
 Substituting in our strong error random variable $|X(t)-Y(t)|$ and recognizing the convergence rate yields the following:
 
+<div>
 $$
 P(|X(t) - Y(t)|\geq a) \leq E(|X(t) - Y(t)|)/a \leq C(\Delta t)^\gamma/a
 $$
+</div>
 
 Flipping the signs and substituting $a=(\Delta t)^{\gamma/2}$ implies that 
 
+<div>
 $$
 P(|X(t) - Y(t)| < (\Delta t)^{\gamma/2}) \geq 1 - C(\Delta t)^{\gamma/2}
 $$
+</div>
 
 which shows that the error at any fixed point is small with probability close to 1.
 
 To compute the rate of convergence for our approximation methods, we can assume that the above inequality holds with rough equality, in which case taking the log of both sides allows us to write the following relationship
 
+<div>
 $$
 \log(e(\Delta t)) =  \log(C) + \gamma \log(\Delta t)
 $$
+</div>
 
 We can then estimate $\gamma$ by the slope of the lines on logarithmic axes (hence our log-log plot above) or simply by running OLS, which we do in the code below. The results below confirm (approximately) what we know to be true by theory (under certain assumptions about the $a()$ and $b()$ functions), which is that the Milstein method has both strong and weak convergence of order 1 whereas the E-M method has weak convergence of order 1, but strong convergence only of order 0.5 (which is reflected in the last graph).
 
