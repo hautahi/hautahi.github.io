@@ -10,9 +10,11 @@ tags:
 
 A stochastic differential equation (SDE) is a differential equation with at least one stochastic process term, typically represented by Brownian motion. They're used in biology, chemistry, epidemiology, finance and a lot of other applications. The general form of a SDE is
 
+<div>
 $$
 dY(t) = a(t,Y(t))dt + b(t,Y(t))dB(t)
 $$
+</div>
 
 where $a(\cdot)$ and $b(\cdot)$ are functions that are often referred to as the "drift" and "diffusion" coefficients, respectively, and $B(t)$ is a Brownian motion. Note the "differential form", which is distinct from the "derivative" form we're used to seeing in ODEs because most stochastic processes are continuous but not differentiable. The above is therefore also commonly written in "integral form" as follows
 
