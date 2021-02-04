@@ -33,6 +33,31 @@
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
   <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}static/css/syntax.css" />
 
+    <!-- Begin section for dataframe table formatting -->
+    <style type="text/css">
+    table.dataframe {
+        width: 80%;
+        <!--height: 240px; 
+        display: block;-->
+        overflow: auto;
+        <!--font-family: Arial, sans-serif;
+        font-size: 13px; -->
+        line-height: 20px;
+        text-align: center;
+    }
+    table.dataframe th {
+      font-weight: bold;
+      padding: 8px;
+    }
+    table.dataframe td {
+      padding: 2px;
+    }
+    table.dataframe tr:hover {
+     <!-- background: #b8d1f3; -->
+    }
+    </style>
+    <!-- End section for dataframe table formatting -->
+
     <!-- Google Analytics -->
     {% include analytics.html %}
   </head>
