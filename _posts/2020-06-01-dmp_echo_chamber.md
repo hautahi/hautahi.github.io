@@ -9,13 +9,13 @@ tags:
 - Echo Chamber Effect
 ---
 
-The modeling of epidemic spreading has many practical applications - from disease epidemiology to the spread of online rumors. Traditional approaches like the classical SIR model assume a "fully mixed" population where interaction between any two individuals is equally likely. These models are popular because they admit simple equations that provide a good general guide to population-level spread dynamics.
+Epidemic modeling has many practical applications - from disease epidemiology to online rumor spreading. Traditional approaches like the classical SIR model assume a "fully mixed" population where interaction between any two individuals is equally likely. These models are popular because they admit simple equations that provide a good general guide to population-level spread dynamics.
 
-However, contacts between individuals generally differ a lot - some pairs interact more than others. Network epidemiology builds on the traditional approaches by assuming individuals interact on a network that reflects more realistic mixing patterns. But there is a cost - relaxing the fully mixed assumption substantially increases model complexity. For example, computing the infection probabilities of each node over time requires keeping track of the entire joint distribution of nodes. With $n$ individuals that can each be in one of $k$ states, the resuling system of $k^n$ variables quickly becomes computationally intractable, even on moderately sized networks. This means that we generally have to resort to expensive Monte Carlo simulations. A lot of attention has therefore focused on developing analytical approximations that can be computed quickly.
+However, contacts between individuals generally differ a lot - some pairs interact more than others. Network epidemiology builds on the traditional approaches by assuming individuals interact on a network that reflects more realistic mixing patterns. But there is a cost - relaxing the fully mixed assumption substantially increases model complexity. For example, computing the infection probabilities of each node over time requires keeping track of the entire joint distribution of node states. With $n$ individuals that can each be in one of $k$ states, the resuling system of $k^n$ variables quickly becomes computationally intractable, even on moderately sized networks. This means that we generally have to resort to expensive Monte Carlo simulations. A lot of attention has therefore focused on developing analytical approximations that can be computed quickly.
 
-But naive approximation methods based on straightforward SIR-type equations suffer from the "Echo Chamber" effect, where pairs of adjacent nodes amplify each other's infection probability. This post begins by explaining why intuitive approaches result in this overestimation of infection risk, then implements one of the most popular analytical approaches to overcome this issue - Dynamic Message Passing (DMP) - originally developed in this context by [Karrer and Newman (2010)](https://arxiv.org/abs/1003.5673) with a lot of subsequent work by others ([Lokhov et al. 2014](https://arxiv.org/abs/1303.5315); [Shrestha et al. 2015](https://arxiv.org/abs/1505.02192); [Koher et al. 2018](https://arxiv.org/abs/1811.05809)). We'll focus on a simple discrete time [SI model](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#Variations_on_the_basic_SIR_model) on a static network in which infected nodes transmit disease to susceptible neighbors with probability $\beta$ each period, and compare estimates of the infection probabilities for each node $i$, $I_i(t)$, across three approaches - Monte Carlo simulation, a naive analytical approach, and DMP.
+But naive approximation methods based on straightforward SIR-type equations suffer from the "Echo Chamber" effect, where pairs of adjacent nodes amplify each other's infection probability. This post begins by explaining why intuitive approaches result in this overestimation of infection risk, then implements one of the most popular analytical approaches to overcome this issue - Dynamic Message Passing (DMP) - originally developed in this context by [Karrer and Newman (2010)](https://arxiv.org/abs/1003.5673) with a lot of subsequent work by others ([Lokhov et al. 2014](https://arxiv.org/abs/1303.5315); [Shrestha et al. 2015](https://arxiv.org/abs/1505.02192); [Koher et al. 2018](https://arxiv.org/abs/1811.05809)). I'll focus on a simple discrete time [SI model](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#Variations_on_the_basic_SIR_model) on a static network in which infected nodes transmit disease to susceptible neighbors with probability $\beta$ each period, and compare estimates of the infection probabilities for each node $i$, $I_i(t)$, across three approaches - Monte Carlo simulation, a naive analytical approach, and DMP.
 
-We'll start by creating a simple two-node network to help motivate our intuition. The directed network is represented as a simple two column dataframe with the first and second columns giving the `source` and `target` nodes, respectively, of each directed edge (see a [previous blog post](https://hautahi.com/ic_comparison) comparing four different ways of representing networks in Python).
+I'll start with a simple two-node network to help motivate our intuition. The directed network is represented as a simple two column dataframe with the first and second columns giving the `source` and `target` nodes, respectively, of each directed edge (see a [previous blog post](https://hautahi.com/ic_comparison) comparing four different ways of representing networks in Python).
 
 
 ```python
@@ -32,8 +32,8 @@ g = pd.DataFrame({'source': [1, 0], 'target': [0, 1]})
 p_style = {"bbox": (150, 150), "vertex_color": "#FBB4AE", "edge_color": "#B3CDE3"}
 G = Graph(directed = True)
 G.add_vertices(g['source'])
-G.add_edges(zip(g['source'],g['target']))
-plot(G, layout=G.layout("kk"), vertex_label = G.vs["name"], **p_style)
+G.add_edges(zip(g['source'], g['target']))
+plot(G, layout = G.layout("kk"), vertex_label = G.vs["name"], **p_style)
 ```
 
 
@@ -44,7 +44,7 @@ plot(G, layout=G.layout("kk"), vertex_label = G.vs["name"], **p_style)
 
 ## Monte Carlo Approach
 
-The following function computes the infection probabilities at time `t` for all nodes via Monte Carlo simulation. In each of `mc` iterations we first draw the initially infected nodes according to their initial infection probabilities stored in the two-column `I0` dataframe. We then simulate the spread dynamics for `t` time periods by first drawing each edge with probability `beta` and then infecting `target` nodes if the `source` node of the remaining edges are infected. The `infected` dictionary at the end of a single MC simulation indicates whether or not a given node is infected. These are then added to a running count across all MC simulations in the `total_infected_count` dictionary, which, after dividing by `mc`, represent the infection probability of each node. The function returns these estimates as a two column dataframe.
+The following function computes infection probabilities at time `t` for all nodes via Monte Carlo simulation. In each of `mc` iterations it first draws the initially infected nodes according to their initial infection probabilities stored in the two-column `I0` dataframe. It then simulates the spread dynamics for `t` time periods by first drawing each edge with probability `beta` and then infecting `target` nodes if the `source` node of the remaining edges are infected. The `infected` dictionary at the end of a single Monte Carlo simulation indicates whether or not a given node is infected. These are then added to a running count across all simulations in the `total_infected_count` dictionary, which, after dividing by `mc`, represent the infection probability of each node. The function returns these estimates as a two column dataframe.
 
 
 ```python
@@ -74,7 +74,7 @@ def SI_MC(g, I0, beta, t, mc = 10000):
             new_infected = infected.copy()
 
             # Go through each edge
-            for f1, f2 in zip(tmp['source'],tmp['target']):
+            for f1, f2 in zip(tmp['source'], tmp['target']):
 
                 # Send an infection if infected
                 if infected[f1]: new_infected[f2] = 1
@@ -96,7 +96,7 @@ def SI_MC(g, I0, beta, t, mc = 10000):
     return(estimates.round({'I(t)_mc': 2}))
 ```
 
-Running the Monte Carlo simulation on our simple 2-node network for $t=4$ periods with $\beta = 0.2$ and initial probabilities of $I_0(0)=0.4$ and $I_1(0)=0$ produces estimates of $I_0(4)=0.4$ and $I_1(4)=0.24$. In this extremely simple case we can confirm these values to be true. Given the disease only arises in the system with probability 0.4, which can only happen at node 0, we know trivially that $I_0(4)$ must be $0.4$. And if node 0 is initially infected, then it has four chances to infect node 1, and therefore does not infect node 1 with probability $(1-0.2)^4$. This implies that node 1 is infected with probability $1-[0.6+0.4\times(1-0.2)^4]=0.24$.
+Running the Monte Carlo simulation on our simple two-node network for $t=4$ periods with $\beta = 0.2$ and initial probabilities of $I_0(0)=0.4$ and $I_1(0)=0$ produces estimates of $I_0(4)=0.4$ and $I_1(4)=0.24$. In this extremely simple case we can confirm these values to be true. Given the disease only arises in the system with probability 0.4, which can only happen at node 0, we know trivially that $I_0(4)$ must be $0.4$. And if node 0 is initially infected, then it has four chances to infect node 1, and therefore does not infect node 1 with probability $(1-0.2)^4$. This implies that node 1 is infected with probability $1-[0.6+0.4\times(1-0.2)^4]=0.24$.
 
 
 ```python
@@ -135,14 +135,14 @@ results_mc.style.hide_index()
 
 ## Naive Analytical Approach
 
-The above Monte Carlo approach can be very slow for large networks, so we'd prefer to compute the infection probabilities analytically if possible. The most intuitive way to do this is to directly model the evolution of each node in a similar fashion to the classical (fully mixed) version of the SI model. The following expressions for the the probability of being susceptible, $S_i(t)$, and the probability of infected, $I_i(t)$, of node $i$ at time $t$ should look familiar to those experienced with traditional SI models.
+The above Monte Carlo approach can be very slow for large networks, so we'd prefer to compute the infection probabilities analytically if possible. The most intuitive way to do this is to directly model the evolution of each node in a similar fashion to the classical (fully mixed) version of the SI model. The following expressions for the probability of being susceptible, $S_i(t)$, and the probability of being infected, $I_i(t)$, of node $i$ at time $t$ should look familiar to those experienced with traditional SI models.
 <div>
 $$
 S_i(t+1) = S_i(t) \prod_{k\in N_i} \left(1-\beta I_k(t)\right) \;\;\;\;\;\;\;\;\;\;\;\;\;\;
 I_i(t+1) = I_i(t) + S_i(t) \left[1- \prod_{k\in N_i} \left(1-\beta  I_k(t)\right)\right]
 $$
 </div>
-The probablity of $i$ being susceptible in one period is equal to the probability of it being susceptible in the previous period multiplied by the probability that it was not infected by any of its in-neighbors, denoted by the set $N_i$, in that period. Similar logic holds for the infection probability of $i$, which is equal to the infection probability in the previous period plus the probability of becoming newly infected. Given that $S_i(t) = 1 - I_i(t)$ in our simple SI setup, we actually only need one of the above equations. We'll use the latter in the function below.
+The probablity of $i$ being susceptible in one period is equal to the probability of it being susceptible in the previous period multiplied by the probability that it was not infected by any of its in-neighbors, denoted by the set $N_i$, in that period. Similar logic holds for the infection probability of $i$, which is equal to the infection probability in the previous period plus the probability of becoming newly infected. Given that $S_i(t) = 1 - I_i(t)$ in our simple SI setup, we actually only need one of the above equations. I'll use the latter in the function below.
 
 The `SI_naive()` function does the same job as `SI_mc()` but using the analytical equations above. After extracting the node id's and the initial infection probabilities from `I0` it iterates over the `t` time periods (note there is no `mc` loop). The `I` dictionary storing the infection probabilities at each period is updated using the equation for $I_i(t+1)$ above, after which a dataframe of estimates is returned in the same format.
 
@@ -181,7 +181,7 @@ def SI_naive(g, I0, beta, t):
     return(estimates.round({'I(t)_naive': 2}))
 ```
 
-Running `SI_naive` on our simple 2-node network and merging it with our earlier results shows that the analytical formulation yields higher infection probability estimates than the Monte Carlo procedure. This is exactly the echo chamber effect. Note also that the analytical approach is about three orders of magnitude faster than the Monte Carlo approach, which is our motivation for avoiding Monte Carlo in the first place.
+Running `SI_naive` on our simple two-node network and merging it with our earlier results shows that the analytical formulation yields higher infection probability estimates than the Monte Carlo procedure. This is exactly the echo chamber effect. Note also that the analytical approach is about three orders of magnitude faster than the Monte Carlo approach, which is our motivation for avoiding Monte Carlo in the first place.
 
 
 ```python
@@ -225,9 +225,9 @@ $$
 \end{align*}
 $$
 </div>
-which imply that the infection probability will continue to grow until $I_i(t) = 1$ for at least one node. In other words, the equations guarantee that the nodes will eventually becomes infectious, even though with probability $0.6$ there is no infection in the system at all.
+which imply that the infection probability will continue to grow until $I_i(t) = 1$ for both nodes. In other words, the equations guarantee that the nodes will eventually become infectious, even though with probability $0.6$ there is no infection in the system at all.
 
-This phenomenon surprised me a lot when I first encountered it, because the equations seem so intuitive and in line with how we model traditional SI models. So what is wrong with them? The key (but subtle) issue is that they do not account for correlations between the states of adjacent nodes, and therefore do not recognize that node 1 cannot be infected without node 0 being infected. In the above, the state of adjacent nodes is only accounted for via the infection probabilities of those neigboring nodes (in the $\prod_{k\in N_i} \left(1-\beta  I_k(t)\right)$ term). But often the infection probability of a node is *conditional on the state* of a neighboring node, not just on its infection probability. So we need to keep track of the joint distribution of the nodes across states.
+This phenomenon surprised me a lot when I first encountered it (in my initial naive attempt to speed up our agricultural disease simulation models at [Onside](https://getonside.com/)), because the equations seem so intuitive and in line with how we approach traditional SI models. So what is wrong with them? The key (but subtle) issue is that they do not account for correlations between the states of adjacent nodes, and therefore do not recognize that node 1 cannot be infected without node 0 being infected. In the above, the state of adjacent nodes is only accounted for via the infection probabilities of those neigboring nodes (in the $\prod_{k\in N_i} \left(1-\beta  I_k(t)\right)$ term). But often the infection probability of a node is *conditional on the state* of a neighboring node, not just on its infection probability. So we need to keep track of the joint distribution of the nodes across states.
 
 In our case, this means explicitly modeling the joint probabilities of the set of four possible states of the network $\{(I, I), (S, S), (I, S), (S, I)\}$. To begin, we know $P(S,I) = 0$ because it's impossible for node 1 to be infected without node 0 being infected. Similarly, we know $P(S,S)=0.6$ because node 0 is susceptible with probability 0.6 and in that case cannot infect node 1. For the outcome $(I,S)$ we know that node 0 must initially be infected and that it must not pass on the infection to node 1 after $t=4$ attempts, therefore $P(I,S)=0.4\times(1-0.2)^4=0.16$. Finally, the probability that both are infected after 4 periods is $P(I,I) = 0.4\times(1-0.41) = 0.24$. We can then calculate the required marginal probabilities as follows
 <div>
@@ -246,11 +246,11 @@ Dynamic Message Passing (DMP) was developed in the context of epidemic spreading
 
 The key idea is to move from a node-centric to an edge-centric focus. By keeping track of the movement of infection across edges, we can disallow an edge to transmit infection two ways and therefore help prevent the echo chamber effect. This is done by defining three new edge-specific "message" variables:
 
-1. $\theta_{k\rightarrow i}(t)$ is the probability that the disease has not passed from $k$ to $i$ up to time $t$
+1. $\theta_{k\rightarrow i}(t)$ is the probability that disease has not passed from $k$ to $i$ up to time $t$
 2. $I_{k\rightarrow i}(t)$ is the probability that $k$ is infected at time $t$ as a result of having received the disease from a node other than $i$, and has not yet passed the infection to $i$
 3. $S_{k\rightarrow i}(t)$ is the probability that $k$ has not been infected by any of its neighbors that are not $i$ up to time $t$
 
-The definitions of the above variables take some time to chew over - they were not very intuitive to me when I first came across them. Another way to think about them is to imagine $i$ being in a "cavity" state, where it can receive but not pass on infection. In fact, DMP is often referred to as the "cavity method" for this reason. In this case, 
+These definitions take some time to chew over - they were not very intuitive to me when I first came across them. Another way to think about them is to imagine $i$ being in a "cavity" state, where it can receive but not pass on infection (DMP is also often referred to as the "cavity method" for this reason). In this case, 
 $S_{k\rightarrow i}(t)$ is the probability that $k$ is susceptible at time $t$ provided $i$ is in the cavity state. Because $k$ is not affected by the state of $i$, it stays susceptible if it doesn't contract the disease from any of its remaining neighbors. Similarly, $I_{k\rightarrow i}(t)$ is the probability that $k$ is infected given that $i$ is in the cavity state and was therefore infected by a neighbor other than $i$.
 
 The probability that $i$ is susceptible at time $t$ can therefore be expressed as the probability that it was initially susceptible, $z_i = 1-I_i(0)$, multiplied by the probability that no adjacent nodes transmitted the infection up to time $t$.
@@ -284,7 +284,7 @@ The `SI_DMP()` function implements the above. The logic is similar to `SI_naive(
 
 
 ```python
-def SI_DMP(g,I0,beta,t): 
+def SI_DMP(g, I0, beta, t): 
     
     # Get id's and initial infection probs for each node
     start, nodes, init_probs = time.time(), I0['node'].tolist(), I0['prob'].tolist()
@@ -380,7 +380,7 @@ results_mc.merge(results_naive,on='node').merge(results_dmp,on='node').style.hid
 
 ## Experiments with Alternative Network Types
 
-We now take a closer look at how DMP performs across five different networks generated below. The first three are simple 3-node networks with edges chosen to carefully illustrate when DMP works well and not so well. The fourth is a larger tree network to demonstrate that DMP is exact on trees. Finally we'll run our methods on a larger "more realistic" network with plenty of loops.
+I now take a closer look at how DMP performs across five different networks generated below. The first three are simple 3-node networks with edges chosen to carefully illustrate when DMP works well and not so well. The fourth is a larger tree network to demonstrate that DMP is exact on trees. Finally I'll run our methods on a larger "more realistic" network with plenty of loops.
 
 
 ```python
